@@ -17,8 +17,8 @@ import configurableCollapseExample from "./ConfigurableCollapseExample.md";
 import ScaleTransitionExample from "./ScaleTransitionExample";
 import scaleTransitionExample from "./ScaleTransitionExample.md";
 
-import UseCSSTransition from "./UseCSSTransition";
-import useCSSTransition from "./UseCSSTransition.md";
+import CustomCSSTransition from "./CustomCSSTransition";
+import customCSSTransition from "./CustomCSSTransition.md";
 
 import FixedPositioningExample from "./FixedPositioningExample";
 import fixedPositioningExample from "./FixedPositioningExample.md";
@@ -53,9 +53,9 @@ const demos = [
     children: <ScaleTransitionExample />,
   },
   {
-    name: "Use CSS Transition",
-    description: useCSSTransition,
-    children: <UseCSSTransition />,
+    name: "Custom CSSTransition",
+    description: customCSSTransition,
+    children: <CustomCSSTransition />,
   },
   {
     name: "Fixed Positioning Example",

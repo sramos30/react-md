@@ -7,6 +7,12 @@ export * from "./CrossFade";
 export { default as ScaleTransition } from "./ScaleTransition";
 export * from "./ScaleTransition";
 
+export { default as Transition } from "./Transition";
+export * from "./Transition";
+
+export { default as CSSTransition } from "./CSSTransition";
+export * from "./CSSTransition";
+
 export { default as useFixedPositioning } from "./useFixedPositioning";
 export * from "./useFixedPositioning";
 export * from "./constants";

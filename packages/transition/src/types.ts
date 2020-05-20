@@ -1,4 +1,4 @@
-import { CSSProperties, Ref, RefCallback } from "react";
+import { CSSProperties, Ref, RefCallback, ReactElement } from "react";
 import {
   CSSTransitionClassNames,
   CSSTransitionProps,
@@ -358,4 +358,17 @@ export interface CollapseTransitionProvidedProps<
    * between collapsed states.
    */
   className: string;
+}
+
+export interface CloneableTransitionChildren<E extends HTMLElement> {
+  /**
+   * An optional ref to merge with the required transition ref.
+   */
+  nodeRef?: Ref<E>;
+
+  /**
+   * A child element to clone the transition ref into. If the children does not
+   * attach the ref to a DOM node, an error will be thrown.
+   */
+  children: ReactElement<{ ref: Ref<E> }> | null;
 }

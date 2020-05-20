@@ -1,11 +1,14 @@
 import React, { FC, useState } from "react";
 import { Button } from "@react-md/button";
 import { useCSSTransition } from "@react-md/transition";
+import { Text } from "@react-md/typography";
 
+import Code from "components/Code/Code";
+
+import styles from "./CustomCSSTransition.module.scss";
 import Page1 from "./Page1";
-import styles from "./UseCSSTransition.module.scss";
 
-const UseCSSTransition: FC = () => {
+const UseCSSTransitionExample: FC = () => {
   const [transitionIn, setTransitionIn] = useState(false);
   const [rendered, transitionProps] = useCSSTransition({
     // changing this value causes the transition behavior to change
@@ -17,9 +20,9 @@ const UseCSSTransition: FC = () => {
     // can also use a string that gets BEM-ified instead
     classNames: {
       enter: styles.enter,
-      enterActive: styles.entering,
+      enterActive: styles.enterActive,
       exit: styles.exit,
-      exitActive: styles.exiting,
+      exitActive: styles.exitActive,
     },
 
     // can also trigger the css transition on initial mount
@@ -35,10 +38,13 @@ const UseCSSTransition: FC = () => {
 
   return (
     <>
+      <Text type="headline-6" margin="top">
+        <Code>useCSSTransition</Code> Example
+      </Text>
       <Button onClick={() => setTransitionIn(!transitionIn)}>Toggle</Button>
       {rendered && <Page1 {...transitionProps} />}
     </>
   );
 };
 
-export default UseCSSTransition;
+export default UseCSSTransitionExample;
