@@ -2040,12 +2040,12 @@ const metadata: ReadonlyArray<RouteMetadata> = [
     pathname: "/packages/transition/demos#scale-transition-example-title",
   },
   {
-    title: "Transition Demo - Use CSS Transition",
+    title: "Transition Demo - Custom CSSTransition",
     summary:
-      "If none of the existing components above match your use-case, you can try out the useCSSTransition hook which is basically a hook version of the CSSTransition component from react-transition-group. The only real difference between the react-transition-group is how the styles get applied and that using a string classNames will use BEM as the naming convention.",
+      "If none of the pre-defined transitions and components match your use case and a custom CSS transition is required, you can use the CSSTransition component or useCSSTransition hook. If you are familiar with react-transition-group, the component and hook should be extremely familiar since they were heavily based of the existing CSSTransition API.",
     type: "demo",
-    pageUrl: "/packages/transition/demos#use-css-transition-title",
-    pathname: "/packages/transition/demos#use-css-transition-title",
+    pageUrl: "/packages/transition/demos#custom-css-transition-title",
+    pathname: "/packages/transition/demos#custom-css-transition-title",
   },
   {
     title: "Transition Demo - Fixed Positioning Example",

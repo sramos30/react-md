@@ -1612,8 +1612,8 @@ const tocs: TOCRecord = {
       title: "Scale Transition Example",
     },
     {
-      anchor: "#use-css-transition",
-      title: "Use CSS Transition",
+      anchor: "#custom-css-transition",
+      title: "Custom CSSTransition",
     },
     {
       anchor: "#fixed-positioning-example",
