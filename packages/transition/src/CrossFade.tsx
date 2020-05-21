@@ -6,9 +6,8 @@ import React, {
   isValidElement,
 } from "react";
 import cn from "classnames";
-import { CSSTransitionClassNames } from "react-transition-group/CSSTransition";
 
-import { TransitionTimeout } from "./types";
+import { CSSTransitionClassNames, TransitionTimeout } from "./types";
 import useCrossFade, { CrossFadeOptions } from "./useCrossFade";
 
 export interface CrossFadeProps

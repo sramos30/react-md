@@ -2,19 +2,11 @@ import React, { FC } from "react";
 import { render, act } from "@testing-library/react";
 
 import useCSSTransition from "../useCSSTransition";
-import { CSSTransitionOptions } from "../types";
+import { CSSTransitionConfig } from "../types";
 
-type TestProps = Omit<
-  CSSTransitionOptions<HTMLDivElement>,
-  "timeout" | "classNames"
-> &
-  Partial<Pick<CSSTransitionOptions<HTMLDivElement>, "timeout" | "classNames">>;
-
-const Test: FC<TestProps> = ({
-  timeout = 150,
-  classNames = "transition",
-  ...props
-}) => {
+const Test: FC<
+  CSSTransitionConfig<HTMLDivElement> & { transitionIn: boolean }
+> = ({ timeout = 150, classNames = "transition", ...props }) => {
   const [rendered, transitionProps] = useCSSTransition({
     timeout,
     classNames,

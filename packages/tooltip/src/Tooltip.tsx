@@ -5,11 +5,10 @@ import React, {
   ReactNode,
 } from "react";
 import cn from "classnames";
-import CSSTransition, {
-  CSSTransitionClassNames,
-} from "react-transition-group/CSSTransition";
 import {
-  OverridableTransitionProps,
+  CSSTransition,
+  CSSTransitionClassNames,
+  TransitionConfig,
   TransitionTimeout,
 } from "@react-md/transition";
 import { bem, SimplePosition } from "@react-md/utils";
@@ -22,15 +21,14 @@ import { TOOLTIP_CLASS_NAMES, TOOLTIP_TRANSITION_TIMEOUT } from "./constants";
  */
 export interface TooltipProps
   extends Pick<
-      OverridableTransitionProps,
+      TransitionConfig<HTMLSpanElement>,
       | "onEnter"
       | "onEntering"
       | "onEntered"
       | "onExit"
       | "onExiting"
       | "onExited"
-      | "mountOnEnter"
-      | "unmountOnExit"
+      | "temporary"
     >,
     HTMLAttributes<HTMLSpanElement> {
   /**
@@ -128,8 +126,7 @@ const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Tooltip(
     onExit,
     onExiting,
     onExited,
-    mountOnEnter,
-    unmountOnExit,
+    temporary = false,
     ...props
   },
   ref
@@ -137,7 +134,7 @@ const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Tooltip(
   return (
     <CSSTransition
       classNames={classNames}
-      in={visible}
+      transitionIn={visible}
       timeout={timeout}
       onEnter={onEnter}
       onEntering={onEntering}
@@ -145,8 +142,7 @@ const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Tooltip(
       onExit={onExit}
       onExiting={onExiting}
       onExited={onExited}
-      mountOnEnter={mountOnEnter}
-      unmountOnExit={unmountOnExit}
+      temporary={temporary}
     >
       <span
         {...props}
@@ -205,8 +201,7 @@ if (process.env.NODE_ENV !== "production") {
       onExit: PropTypes.func,
       onExiting: PropTypes.func,
       onExited: PropTypes.func,
-      mountOnEnter: PropTypes.bool,
-      unmountOnExit: PropTypes.bool,
+      temporary: PropTypes.bool,
       position: PropTypes.oneOf(["above", "below", "left", "right"]),
       visible: PropTypes.bool.isRequired,
     };

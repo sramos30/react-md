@@ -65,8 +65,7 @@ const SandboxFileTree: FC<SandboxFileTreeProps> = ({
       className={cn({
         [styles.inline]: inline,
       })}
-      mountOnEnter={!inline}
-      unmountOnExit={!inline}
+      temporary={!inline}
       disableScrollLock
       disableTransition={disableTransition}
       disableTabFocusWrap={isKeyboard}

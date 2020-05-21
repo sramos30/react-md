@@ -1,8 +1,8 @@
 import React, { forwardRef } from "react";
 import cn from "classnames";
-import { CSSTransitionClassNames } from "react-transition-group/CSSTransition";
 import {
   FixedTo,
+  CSSTransitionClassNames,
   GetFixedPositionOptions,
   OptionalFixedPositionOptions,
   useFixedPositioning,

@@ -128,15 +128,8 @@ const TabsList = forwardRef<HTMLDivElement, TabsListProps>(function TabsList(
         }
 
         const tab = Children.only(child);
-        let ref: Ref<HTMLElement> = itemRefs[i];
-        if (tab.props.ref) {
-          ref = (instance: HTMLElement | null) => {
-            itemRefs[i].current = instance;
-            applyRef(instance, tab.props.ref);
-          };
-        }
 
-        return cloneElement(tab, { ref });
+        return cloneElement(tab, { ref: itemRefs[i] });
       })}
     </div>
   );

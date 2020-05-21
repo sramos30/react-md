@@ -11,6 +11,7 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   roots: packages.map((name) => `<rootDir>/packages/${name}/src`),
+  verbose: false,
   globals: {
     'ts-jest': {
       tsConfig: './tsconfig.test.json',
@@ -37,4 +38,3 @@ module.exports = {
     ...packages.map((name) => `<rootDir>/packages/${name}/lib`),
   ],
 };
-

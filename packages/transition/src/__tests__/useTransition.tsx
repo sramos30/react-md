@@ -1,13 +1,13 @@
 import React, { MutableRefObject, FC, Ref, createRef } from "react";
 import { render, act } from "@testing-library/react";
 
-import useTransition, { TransitionReturnValue } from "../useTransition";
+import useTransition, { TransitionHookReturnValue } from "../useTransition";
 import { EXITED, ENTERED, ENTERING, EXITING } from "../constants";
-import { TransitionOptions } from "../types";
+import { TransitionHookOptions } from "../types";
 
-type TestResult = MutableRefObject<TransitionReturnValue<HTMLDivElement>>;
+type TestResult = MutableRefObject<TransitionHookReturnValue<HTMLDivElement>>;
 
-interface TestProps extends TransitionOptions<HTMLDivElement> {
+interface TestProps extends TransitionHookOptions<HTMLDivElement> {
   nodeRef?: Ref<HTMLDivElement>;
   result: TestResult;
 }

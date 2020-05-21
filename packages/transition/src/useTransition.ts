@@ -8,9 +8,8 @@ import {
 } from "react";
 import { applyRef } from "@react-md/utils";
 
-import { TransitionOptions } from "./types";
+import { TransitionHookOptions } from "./types";
 import {
-  TransitionStage,
   ENTER,
   ENTERING,
   ENTERED,
@@ -19,35 +18,13 @@ import {
   EXITED,
   UNMOUNT,
   TransitionAction,
+  TransitionState,
 } from "./constants";
 import getNextStage from "./getNextStage";
 import getTimeout from "./getTimeout";
 import getTimeoutDuration from "./getTimeoutDuration";
 
-export interface TransitionState {
-  /**
-   * The current stage for the transition. This probably won't be used too much
-   * unless you want to apply custom classnames based on the stage.
-   */
-  stage: TransitionStage;
-
-  /**
-   * Boolean if the component should be rendered in the DOM. This will always be
-   * `true` if the `temporary` option is omitted or `false`. Otherwise, it will
-   * be `true` during the transitions and entered.
-   */
-  rendered: boolean;
-
-  /**
-   * Boolean if the transition is in the initial mounting/appearing stage while
-   * entering. This will be `false` if the `appear` option is `false` and
-   * automatically set to `false` after the first transition if `appear` was
-   * `true`.
-   */
-  appearing: boolean;
-}
-
-export interface TransitionReturnValue<E extends HTMLElement>
+export interface TransitionHookReturnValue<E extends HTMLElement>
   extends TransitionState {
   /**
    * A ref that must be passed to a DOM node for the transition to work. This
@@ -140,7 +117,7 @@ const getInitialState = (
  * @return An object describing the current transition stage and props that
  * should be passed to a component.
  */
-export default function useTransition<E extends HTMLElement = HTMLDivElement>({
+export default function useTransition<E extends HTMLElement>({
   appear = false,
   repaint = false,
   temporary = false,
@@ -153,7 +130,7 @@ export default function useTransition<E extends HTMLElement = HTMLDivElement>({
   onExiting,
   onExited,
   ref,
-}: TransitionOptions<E>): TransitionReturnValue<E> {
+}: TransitionHookOptions<E>): TransitionHookReturnValue<E> {
   const [{ stage, rendered, appearing }, dispatch] = useReducer(
     reducer,
     INITIAL_STATE,
@@ -182,6 +159,19 @@ export default function useTransition<E extends HTMLElement = HTMLDivElement>({
   });
 
   const timeout = getTimeout(propTimeout, appear);
+  const prevTimeout = useRef(timeout);
+
+  // I'll need to figure out a better way to write the transition behavior using
+  // hooks since this is really hacky.
+  let forceUpdate = false;
+  if (
+    timeout.appear !== prevTimeout.current.appear ||
+    timeout.enter !== prevTimeout.current.enter ||
+    timeout.exit !== prevTimeout.current.exit
+  ) {
+    prevTimeout.current = timeout;
+    forceUpdate = true;
+  }
   const nodeRef = useRef<E | null>(null);
 
   const disableEnterExitTransition = useRef(!appear || !transitionIn);
@@ -210,7 +200,7 @@ export default function useTransition<E extends HTMLElement = HTMLDivElement>({
       duration = timeout.exit;
     }
 
-    if (duration > 0) {
+    if (duration > 0 || appearing) {
       dispatch(transitionIn ? ENTER : EXIT);
     } else {
       dispatch(transitionIn ? ENTERED : EXITED);
@@ -218,7 +208,7 @@ export default function useTransition<E extends HTMLElement = HTMLDivElement>({
 
     // see comment above about why it's only `transitionIn`
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transitionIn]);
+  }, [transitionIn, forceUpdate]);
 
   const isFirstRender = useRef(true);
 

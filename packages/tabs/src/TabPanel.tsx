@@ -1,14 +1,15 @@
 import React, { forwardRef, HTMLAttributes } from "react";
 import cn from "classnames";
-import CSSTransition, {
+import {
+  CSSTransitionConfig,
   CSSTransitionClassNames,
-} from "react-transition-group/CSSTransition";
-import { OverridableCSSTransitionProps } from "@react-md/transition";
+  CSSTransition,
+} from "@react-md/transition";
 import { bem } from "@react-md/utils";
 
 export interface TabPanelProps
   extends HTMLAttributes<HTMLDivElement>,
-    OverridableCSSTransitionProps {
+    CSSTransitionConfig<HTMLDivElement> {
   /**
    * The id for the tab panel. This is required for a11y but will automatically
    * be provided by the `TabPanels` component by cloning the `id` in.
@@ -49,7 +50,7 @@ const DEFAULT_TABPANEL_CLASSNAMES: CSSTransitionClassNames = {
 const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(function TabPanel(
   {
     className,
-    in: transitionIn,
+    transitionIn,
     appear,
     enter,
     exit,
@@ -69,7 +70,8 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(function TabPanel(
 ) {
   return (
     <CSSTransition
-      in={transitionIn && !hidden}
+      nodeRef={ref}
+      transitionIn={!!(transitionIn && !hidden)}
       appear={appear}
       enter={enter}
       exit={exit}
@@ -84,7 +86,6 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(function TabPanel(
     >
       <div
         {...props}
-        ref={ref}
         role="tabpanel"
         hidden={hidden}
         className={cn(block(), className)}
@@ -108,7 +109,7 @@ if (process.env.NODE_ENV !== "production") {
           exit: PropTypes.number,
         }),
       ]),
-      in: PropTypes.bool,
+      transitionIn: PropTypes.bool,
       appear: PropTypes.bool,
       enter: PropTypes.bool,
       exit: PropTypes.bool,

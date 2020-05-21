@@ -2,15 +2,15 @@ import { Children, cloneElement, ReactElement } from "react";
 import cn from "classnames";
 
 import {
+  COLLAPSE_TIMEOUT,
   DEFAULT_COLLAPSE_MIN_HEIGHT,
   DEFAULT_COLLAPSE_MIN_PADDING_BOTTOM,
   DEFAULT_COLLAPSE_MIN_PADDING_TOP,
-  COLLAPSE_TIMEOUT,
 } from "./constants";
-import { CollapseOptions } from "./types";
-import useCollapse from "./useCollapse";
+import useCollapse, { CollapseHookOptions } from "./useCollapse";
 
-export interface CollapseProps extends CollapseOptions<HTMLElement> {
+export interface CollapseProps<E extends HTMLElement>
+  extends CollapseHookOptions<E> {
   /**
    * Boolean if the the child is currently collapsed.
    */
@@ -39,34 +39,20 @@ export interface CollapseProps extends CollapseOptions<HTMLElement> {
  * `padding-top`, and `padding-bottom` is much less performant than `transform`
  * transition since it forces DOM repaints.
  */
-export default function Collapse({
+export default function Collapse<E extends HTMLElement>({
   children,
   collapsed,
-  className,
-  appear = false,
   timeout = COLLAPSE_TIMEOUT,
-  onEnter,
-  onEntering,
-  onEntered,
-  onExit,
-  onExiting,
-  onExited,
   minHeight = DEFAULT_COLLAPSE_MIN_HEIGHT,
   minPaddingTop = DEFAULT_COLLAPSE_MIN_PADDING_TOP,
   minPaddingBottom = DEFAULT_COLLAPSE_MIN_PADDING_BOTTOM,
   temporary = minHeight === 0 && minPaddingTop === 0 && minPaddingBottom === 0,
-}: CollapseProps): ReactElement | null {
-  const [rendered, transitionProps] = useCollapse<HTMLElement>(collapsed, {
-    appear,
+  ...options
+}: CollapseProps<E>): ReactElement | null {
+  const [rendered, transitionProps] = useCollapse<E>(collapsed, {
+    ...options,
     temporary,
-    className,
     timeout,
-    onEnter,
-    onEntering,
-    onEntered,
-    onExit,
-    onExiting,
-    onExited,
     minHeight,
     minPaddingBottom,
     minPaddingTop,

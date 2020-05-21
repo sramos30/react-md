@@ -1,5 +1,4 @@
-import React, { ReactElement, ReactNode } from "react";
-import CSSTransition from "react-transition-group/CSSTransition";
+import React, { ReactElement } from "react";
 import {
   ConditionalPortal,
   RenderConditionalPortalProps,
@@ -10,10 +9,12 @@ import {
   SCALE_TIMEOUT,
   SCALE_Y_CLASSNAMES,
 } from "./constants";
-import { OverridableCSSTransitionProps } from "./types";
+import CSSTransition, { CSSTransitionChildren } from "./CSSTransition";
+import { CSSTransitionConfig } from "./types";
 
-export interface ScaleTransitionProps
-  extends OverridableCSSTransitionProps,
+export interface ScaleTransitionProps<E extends HTMLElement>
+  extends CSSTransitionConfig<E>,
+    CSSTransitionChildren<E>,
     RenderConditionalPortalProps {
   /**
    * Boolean if the vertical scale animation should be used instead of the
@@ -27,11 +28,6 @@ export interface ScaleTransitionProps
    * animation.
    */
   visible: boolean;
-
-  /**
-   * The children to render.
-   */
-  children?: ReactNode;
 }
 
 /**
@@ -45,7 +41,7 @@ export interface ScaleTransitionProps
  * prop which will update the transition to use `transform: scaleY(0)` to
  * `transform: scaleY(1)` instead.
  */
-export default function ScaleTransition({
+export default function ScaleTransition<E extends HTMLElement>({
   visible,
   children,
   classNames: propClassNames,
@@ -54,10 +50,9 @@ export default function ScaleTransition({
   portal = false,
   portalInto,
   portalIntoId,
-  mountOnEnter = true,
-  unmountOnExit = true,
+  temporary = true,
   ...props
-}: ScaleTransitionProps): ReactElement {
+}: ScaleTransitionProps<E>): ReactElement {
   let classNames = propClassNames;
   if (!classNames) {
     classNames = vertical ? SCALE_Y_CLASSNAMES : SCALE_CLASSNAMES;
@@ -71,11 +66,10 @@ export default function ScaleTransition({
     >
       <CSSTransition
         {...props}
-        in={visible}
+        transitionIn={visible}
         timeout={timeout}
         classNames={classNames}
-        mountOnEnter={mountOnEnter}
-        unmountOnExit={unmountOnExit}
+        temporary={temporary}
       >
         {children}
       </CSSTransition>
@@ -115,7 +109,7 @@ if (process.env.NODE_ENV !== "production") {
           exitDone: PropTypes.string,
         }),
       ]),
-      children: PropTypes.node,
+      children: PropTypes.element,
     };
   } catch (e) {}
 }

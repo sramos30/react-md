@@ -148,23 +148,24 @@ const TabPanels = forwardRef<HTMLDivElement, TabPanelsProps>(function TabPanels(
             key = `${activeIndex}`;
           }
 
-          let { in: animateIn } = panel.props;
+          let { transitionIn } = panel.props;
           if (animimatable.current) {
             // when the persistent flag is in, I have too handle the TransitionGroup
             // `in` behavior manually based on activeIndex
-            animateIn = index === activeIndex;
+            transitionIn = index === activeIndex;
           }
 
           let hidden = index !== activeIndex;
           if (persistent) {
             hidden = hidden && index !== previous;
           }
+
           return cloneElement(child, {
             key,
-            in: animateIn,
             id: `${tabsId}-panel-${index + 1}`,
             "aria-labelledby": labelledBy,
             hidden,
+            transitionIn,
             onEntered: disableTransition ? undefined : onEntered,
           });
         })}

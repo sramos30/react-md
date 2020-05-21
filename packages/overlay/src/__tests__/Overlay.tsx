@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createRef } from "react";
 import { render, fireEvent } from "@testing-library/react";
 
 import Overlay from "../Overlay";
@@ -41,5 +41,18 @@ describe("Overlay", () => {
 
     fireEvent.click(overlay);
     expect(onRequestClose).toBeCalledTimes(1);
+  });
+
+  it("should correctly forward the ref onwards", () => {
+    const ref = createRef<HTMLSpanElement>();
+    const props = { "data-testid": "overlay", onRequestClose: jest.fn(), ref };
+
+    const { getByTestId, rerender } = render(
+      <Overlay {...props} visible={false} />
+    );
+    expect(ref.current).toBe(null);
+
+    rerender(<Overlay {...props} visible />);
+    expect(ref.current).toBe(getByTestId("overlay"));
   });
 });

@@ -1,6 +1,4 @@
-import { CSSTransitionClassNames } from "react-transition-group/CSSTransition";
-
-import { TransitionTimeout } from "./types";
+import { TransitionTimeout, CSSTransitionClassNames } from "./types";
 
 export const ENTER = "enter";
 export const ENTERING = "entering";
@@ -20,6 +18,29 @@ export type TransitionStage =
 export const UNMOUNT = "unmount";
 
 export type TransitionAction = TransitionStage | typeof UNMOUNT;
+
+export interface TransitionState {
+  /**
+   * The current stage for the transition. This probably won't be used too much
+   * unless you want to apply custom classnames based on the stage.
+   */
+  stage: TransitionStage;
+
+  /**
+   * Boolean if the component should be rendered in the DOM. This will always be
+   * `true` if the `temporary` option is omitted or `false`. Otherwise, it will
+   * be `true` during the transitions and entered.
+   */
+  rendered: boolean;
+
+  /**
+   * Boolean if the transition is in the initial mounting/appearing stage while
+   * entering. This will be `false` if the `appear` option is `false` and
+   * automatically set to `false` after the first transition if `appear` was
+   * `true`.
+   */
+  appearing: boolean;
+}
 
 export const COLLAPSE_TIMEOUT: TransitionTimeout = {
   enter: 250,

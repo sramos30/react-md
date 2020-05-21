@@ -16,7 +16,6 @@ exports[`ScaleTransition should allow for portalling 2`] = `
 <body>
   <div />
   <div
-    class=""
     data-testid="div"
   >
     Some amazing content!
@@ -38,9 +37,7 @@ exports[`ScaleTransition should render correctly for horizontal transitions 2`] 
 
 exports[`ScaleTransition should render correctly for horizontal transitions 3`] = `
 <div>
-  <div
-    class=""
-  >
+  <div>
     Some amazing content
   </div>
 </div>
@@ -72,9 +69,7 @@ exports[`ScaleTransition should render correctly for vertical transitions 2`] = 
 
 exports[`ScaleTransition should render correctly for vertical transitions 3`] = `
 <div>
-  <div
-    class=""
-  >
+  <div>
     Some amazing content
   </div>
 </div>

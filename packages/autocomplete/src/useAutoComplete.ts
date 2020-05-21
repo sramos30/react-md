@@ -13,7 +13,10 @@ import {
   useState,
 } from "react";
 import { ListElement } from "@react-md/list";
-import { TransitionHooks, useFixedPositioning } from "@react-md/transition";
+import {
+  FixedPositionTransitionHooks,
+  useFixedPositioning,
+} from "@react-md/transition";
 import {
   applyRef,
   ItemRefList,
@@ -83,7 +86,7 @@ interface ReturnValue {
   handleKeyDown: KeyboardEventHandler<HTMLInputElement>;
   handleAutoComplete: (index: number) => void;
   fixedStyle: CSSProperties | undefined;
-  transitionHooks: Required<TransitionHooks>;
+  transitionHooks: Required<FixedPositionTransitionHooks<HTMLInputElement>>;
 }
 
 /**

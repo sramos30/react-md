@@ -1,8 +1,6 @@
 import React, { FC } from "react";
 import cn from "classnames";
-import CSSTransition, {
-  CSSTransitionClassNames,
-} from "react-transition-group/CSSTransition";
+import { CSSTransitionClassNames, CSSTransition } from "@react-md/transition";
 
 import styles from "./Blind.module.scss";
 
@@ -23,7 +21,7 @@ const Blind: FC<BlindProps> = ({ visible, onExited }) => (
   <CSSTransition
     timeout={2500}
     classNames={CLASSNAMES}
-    in={visible}
+    transitionIn={visible}
     onExited={onExited}
   >
     <span className={styles.blind} />

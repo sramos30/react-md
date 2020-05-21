@@ -22,8 +22,7 @@ export { default as useCollapse } from "./useCollapse";
 export { default as useCrossFade, CrossFadeOptions } from "./useCrossFade";
 export {
   default as useTransition,
-  TransitionReturnValue,
-  TransitionState,
+  TransitionHookReturnValue,
 } from "./useTransition";
 export {
   default as useCSSTransition,

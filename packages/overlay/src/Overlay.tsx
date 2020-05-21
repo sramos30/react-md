@@ -1,18 +1,20 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */
 import React, { forwardRef, HTMLAttributes } from "react";
 import cn from "classnames";
-import CSSTransition, {
-  CSSTransitionClassNames,
-} from "react-transition-group/CSSTransition";
 import {
   ConditionalPortal,
   RenderConditionalPortalProps,
 } from "@react-md/portal";
-import { OverridableCSSTransitionProps } from "@react-md/transition";
+import { CSSTransition, CSSTransitionConfig } from "@react-md/transition";
 import { bem } from "@react-md/utils";
 
+import {
+  DEFAULT_OVERLAY_CLASSNAMES,
+  DEFAULT_OVERLAY_TIMEOUT,
+} from "./constants";
+
 export interface OverlayProps
-  extends OverridableCSSTransitionProps,
+  extends CSSTransitionConfig<HTMLSpanElement>,
     RenderConditionalPortalProps,
     HTMLAttributes<HTMLSpanElement> {
   /**
@@ -25,7 +27,7 @@ export interface OverlayProps
    * A function that should change the `visible` prop to `false`. This is used
    * so that clicking the overlay can hide the overlay.
    */
-  onRequestClose: () => void;
+  onRequestClose(): void;
 
   /**
    * Boolean if the overlay should still be "hidden" from the user while
@@ -46,28 +48,20 @@ export interface OverlayProps
 
 const block = bem("rmd-overlay");
 
-const DEFAULT_OVERLAY_CLASSNAMES: CSSTransitionClassNames = {
-  appearActive: "rmd-overlay--active",
-  enterActive: "rmd-overlay--active",
-  enterDone: "rmd-overlay--active",
-};
-
 /**
  * The `Overlay` component is a simple component used to render a full page
  * overlay in the page with an enter and exit animation. If there are overflow
  * issues or you need to portal the overlay to a different area within your app,
  * you should use the `OverlayPortal` component instead.
  */
-const Overlay = forwardRef<HTMLDivElement, OverlayProps>(function Overlay(
+const Overlay = forwardRef<HTMLSpanElement, OverlayProps>(function Overlay(
   {
     className,
     visible,
     hidden = false,
     clickable = true,
-    timeout = 150,
     children,
-    mountOnEnter = true,
-    unmountOnExit = true,
+    temporary = true,
     onRequestClose,
     onEnter,
     onEntering,
@@ -78,6 +72,7 @@ const Overlay = forwardRef<HTMLDivElement, OverlayProps>(function Overlay(
     portal,
     portalInto,
     portalIntoId,
+    timeout = DEFAULT_OVERLAY_TIMEOUT,
     classNames = DEFAULT_OVERLAY_CLASSNAMES,
     tabIndex = -1,
     ...props
@@ -92,11 +87,11 @@ const Overlay = forwardRef<HTMLDivElement, OverlayProps>(function Overlay(
     >
       <CSSTransition
         appear
-        in={visible}
+        nodeRef={ref}
+        transitionIn={visible}
         classNames={hidden ? "" : classNames}
         timeout={hidden ? 0 : timeout}
-        mountOnEnter={mountOnEnter}
-        unmountOnExit={unmountOnExit}
+        temporary={temporary}
         onEnter={onEnter}
         onEntering={onEntering}
         onEntered={onEntered}
@@ -104,27 +99,14 @@ const Overlay = forwardRef<HTMLDivElement, OverlayProps>(function Overlay(
         onExiting={onExiting}
         onExited={onExited}
       >
-        {(state) => (
-          <span
-            {...props}
-            ref={ref}
-            className={cn(
-              block({
-                // have to manually set the active state here since react-transition-group doesn't
-                // clone in the transition `classNames` and if the overlay re-renders while the
-                // animation has finished, the active className will disappear
-                active: !hidden && state === "entered",
-                visible,
-                clickable,
-              }),
-              className
-            )}
-            onClick={onRequestClose}
-            tabIndex={tabIndex}
-          >
-            {children}
-          </span>
-        )}
+        <span
+          {...props}
+          className={cn(block({ visible, clickable }), className)}
+          onClick={onRequestClose}
+          tabIndex={tabIndex}
+        >
+          {children}
+        </span>
       </CSSTransition>
     </ConditionalPortal>
   );
@@ -156,8 +138,7 @@ if (process.env.NODE_ENV !== "production") {
           exit: PropTypes.number,
         }),
       ]),
-      mountOnEnter: PropTypes.bool,
-      unmountOnExit: PropTypes.bool,
+      temporary: PropTypes.bool,
       onEnter: PropTypes.func,
       onEntering: PropTypes.func,
       onEntered: PropTypes.func,

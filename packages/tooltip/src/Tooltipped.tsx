@@ -49,10 +49,7 @@ export interface TooltippedProps
   extends RenderConditionalPortalProps,
     Omit<TooltipStateOptions, "defaultPosition">,
     Partial<Pick<TooltipStateOptions, "defaultPosition">>,
-    Pick<
-      TooltipProps,
-      "dense" | "lineWrap" | "mountOnEnter" | "unmountOnExit"
-    > {
+    Pick<TooltipProps, "dense" | "lineWrap" | "temporary"> {
   /**
    * The id for the element that has a tooltip. This is always required since it
    * will be passed down to the `containerProps` in the children renderer
@@ -186,8 +183,7 @@ function Tooltipped({
   "aria-describedby": describedBy,
   defaultPosition = "below",
   disableSwapping,
-  mountOnEnter = false,
-  unmountOnExit = false,
+  temporary = false,
   ...props
 }: TooltippedProps): ReactElement {
   const { hide, visible, position, handlers } = useTooltipState({
@@ -274,8 +270,7 @@ function Tooltipped({
         {...props}
         dense={dense}
         position={position}
-        mountOnEnter={mountOnEnter}
-        unmountOnExit={unmountOnExit}
+        temporary={temporary}
         style={style}
         onEnter={onEnter}
         onEntering={onEntering}

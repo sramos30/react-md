@@ -5,13 +5,12 @@ import React, {
   ReactNode,
 } from "react";
 import cn from "classnames";
-import CSSTransition from "react-transition-group/CSSTransition";
 import { Overlay } from "@react-md/overlay";
 import {
   ConditionalPortal,
   RenderConditionalPortalProps,
 } from "@react-md/portal";
-import { OverridableCSSTransitionProps } from "@react-md/transition";
+import { CSSTransition, CSSTransitionConfig } from "@react-md/transition";
 import {
   bem,
   FocusContainer,
@@ -24,7 +23,7 @@ import {
 import useNestedDialogFixes from "./useNestedDialogFixes";
 
 export interface DialogProps
-  extends OverridableCSSTransitionProps,
+  extends CSSTransitionConfig<HTMLDivElement>,
     RenderConditionalPortalProps,
     FocusContainerOptionsProps,
     HTMLAttributes<HTMLDivElement> {
@@ -231,8 +230,7 @@ const Dialog = forwardRef<HTMLDivElement, StrictProps>(function Dialog(
     disableTransition = false,
     classNames = DEFAULT_DIALOG_CLASSNAMES,
     timeout = DEFAULT_DIALOG_TIMEOUT,
-    mountOnEnter = true,
-    unmountOnExit = true,
+    temporary = true,
     onEnter,
     onEntering,
     onEntered,
@@ -348,7 +346,7 @@ const Dialog = forwardRef<HTMLDivElement, StrictProps>(function Dialog(
           appear={!disableTransition && appear}
           enter={!disableTransition && enter}
           exit={!disableTransition && exit}
-          in={visible}
+          transitionIn={visible}
           classNames={classNames}
           timeout={timeout}
           onEnter={onEnter}
@@ -357,8 +355,7 @@ const Dialog = forwardRef<HTMLDivElement, StrictProps>(function Dialog(
           onExit={onExit}
           onExiting={onExiting}
           onExited={onExited}
-          mountOnEnter={mountOnEnter}
-          unmountOnExit={unmountOnExit}
+          temporary={temporary}
         >
           {dialog}
         </CSSTransition>
@@ -382,8 +379,7 @@ if (process.env.NODE_ENV !== "production") {
       modal: PropTypes.bool,
       visible: PropTypes.bool.isRequired,
       onRequestClose: PropTypes.func.isRequired,
-      mountOnEnter: PropTypes.bool,
-      unmountOnExit: PropTypes.bool,
+      temporary: PropTypes.bool,
       overlay: PropTypes.bool,
       overlayStyle: PropTypes.object,
       overlayClassName: PropTypes.string,

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { ReactElement, ReactNode } from "react";
-import TransitionGroup from "react-transition-group/TransitionGroup";
+/* import TransitionGroup from "react-transition-group/TransitionGroup"; */
 
 export interface PanelGroupProps {
   children?: ReactNode;
@@ -20,14 +20,15 @@ export default function PanelGroup({
     return <>{children}</>;
   }
 
-  return (
-    <TransitionGroup
-      component={null}
-      appear={!disableTransition}
-      enter={!disableTransition}
-      exit={!disableTransition}
-    >
-      {children}
-    </TransitionGroup>
-  );
+  return <>{children}</>;
+  /* return ( */
+  /*   <TransitionGroup */
+  /*     component={null} */
+  /*     appear={!disableTransition} */
+  /*     enter={!disableTransition} */
+  /*     exit={!disableTransition} */
+  /*   > */
+  /*     {children} */
+  /*   </TransitionGroup> */
+  /* ); */
 }

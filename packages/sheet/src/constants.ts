@@ -1,5 +1,7 @@
-import { TransitionTimeout } from "@react-md/transition";
-import { CSSTransitionClassNames } from "react-transition-group/CSSTransition";
+import {
+  CSSTransitionClassNames,
+  TransitionTimeout,
+} from "@react-md/transition";
 
 export const DEFAULT_SHEET_TIMEOUT: TransitionTimeout = {
   enter: 200,

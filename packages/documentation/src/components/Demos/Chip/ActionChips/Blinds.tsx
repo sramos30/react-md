@@ -1,8 +1,10 @@
 import React, { FC, useState } from "react";
 import cn from "classnames";
-import CSSTransition, {
+import {
   CSSTransitionClassNames,
-} from "react-transition-group/CSSTransition";
+  CSSTransition,
+  ENTERED,
+} from "@react-md/transition";
 
 import Blind from "./Blind";
 import styles from "./Blinds.module.scss";
@@ -30,18 +32,17 @@ const Blinds: FC<BlindsProps> = ({ visible }) => {
 
   return (
     <CSSTransition
-      in={isVisible}
-      mountOnEnter
-      unmountOnExit
+      transitionIn={isVisible}
+      temporary
       timeout={1500}
       classNames={CLASSNAMES}
     >
-      {(state) => (
+      {({ stage }) => (
         <div className={styles.blinds}>
           {Array.from({ length: 11 }, (_, i) => (
             <Blind
               key={i}
-              visible={visible && state === "entered"}
+              visible={visible && stage === ENTERED}
               onExited={i === 10 ? hide : undefined}
             />
           ))}

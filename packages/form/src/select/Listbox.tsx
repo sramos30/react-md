@@ -3,8 +3,9 @@ import cn from "classnames";
 import { List, ListElement } from "@react-md/list";
 import { RenderConditionalPortalProps } from "@react-md/portal";
 import {
-  OverridableCSSTransitionProps,
+  CSSTransitionConfig,
   ScaleTransition,
+  TransitionActions,
 } from "@react-md/transition";
 import {
   bem,
@@ -136,7 +137,7 @@ export interface ListboxProps
       "value" | "defaultValue" | "onChange"
     >,
     ListboxOptions,
-    OverridableCSSTransitionProps {
+    Omit<CSSTransitionConfig<ListElement>, keyof TransitionActions> {
   /**
    * The id for the listbox. This is required for a11y and is used to generate
    * unique ids for each option within the listbox for `aria-activedescendant`
@@ -208,8 +209,6 @@ const Listbox = forwardRef<ListElement, ListboxProps>(function Listbox(
     timeout,
     readOnly,
     classNames,
-    mountOnEnter,
-    unmountOnExit,
     onEnter,
     onEntering,
     onEntered,
@@ -397,8 +396,7 @@ const Listbox = forwardRef<ListElement, ListboxProps>(function Listbox(
       vertical
       timeout={timeout}
       classNames={classNames}
-      mountOnEnter={mountOnEnter}
-      unmountOnExit={unmountOnExit}
+      temporary={temporary}
       onEnter={onEnter}
       onEntering={onEntering}
       onEntered={onEntered}
@@ -496,8 +494,6 @@ if (process.env.NODE_ENV !== "production") {
         }),
       ]),
       readOnly: PropTypes.bool,
-      mountOnEnter: PropTypes.bool,
-      unmountOnExit: PropTypes.bool,
       onEnter: PropTypes.func,
       onEntering: PropTypes.func,
       onEntered: PropTypes.func,

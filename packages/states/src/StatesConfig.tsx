@@ -5,8 +5,10 @@ import React, {
   useContext,
   useMemo,
 } from "react";
-import { CSSTransitionClassNames } from "react-transition-group/CSSTransition";
-import { TransitionTimeout } from "@react-md/transition";
+import {
+  CSSTransitionClassNames,
+  TransitionTimeout,
+} from "@react-md/transition";
 
 import { RIPPLE_CLASS_NAMES, RIPPLE_TIMEOUT } from "./ripples/constants";
 

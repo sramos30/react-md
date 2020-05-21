@@ -1,4 +1,5 @@
-import { CSSTransitionClassNames } from "react-transition-group/CSSTransition";
+import { CSSTransitionClassNames } from "@react-md/transition";
+
 import {
   SupportedPhoneLayout,
   SupportedTabletLayout,

@@ -1,7 +1,4 @@
 import React, { FC, useCallback, useRef, useState } from "react";
-import CSSTransition, {
-  CSSTransitionClassNames,
-} from "react-transition-group/CSSTransition";
 import { Button } from "@react-md/button";
 import {
   Checkbox,
@@ -13,7 +10,11 @@ import {
 } from "@react-md/form";
 import { ArrowDropDownSVGIcon } from "@react-md/material-icons";
 import { Overlay } from "@react-md/overlay";
-import { useFixedPositioning } from "@react-md/transition";
+import {
+  useFixedPositioning,
+  CSSTransitionClassNames,
+  CSSTransition,
+} from "@react-md/transition";
 import { Text } from "@react-md/typography";
 import {
   HorizontalPosition,
@@ -207,9 +208,8 @@ const FixedPositioningExample: FC = () => {
         visible={visible}
       />
       <CSSTransition
-        in={visible}
-        mountOnEnter
-        unmountOnExit
+        transitionIn={visible}
+        temporary
         classNames={CLASSNAMES}
         timeout={{ enter: 200, exit: 150 }}
         onEnter={onEnter}

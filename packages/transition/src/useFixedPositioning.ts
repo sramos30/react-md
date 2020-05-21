@@ -1,5 +1,4 @@
 import { CSSProperties, useCallback, useEffect, useState } from "react";
-import { TransitionProps } from "react-transition-group/Transition";
 import {
   FixedPositionOptions,
   getFixedPosition,
@@ -8,6 +7,7 @@ import {
   useResizeListener,
   useScrollListener,
 } from "@react-md/utils";
+import { TransitionCallbacks } from "./types";
 
 export type FixedToFunction = () => HTMLElement | null;
 export type FixedTo = string | HTMLElement | null | FixedToFunction;
@@ -38,14 +38,14 @@ export interface ScrollData {
 
 export type OnFixedPositionScroll = (event: Event, data: ScrollData) => void;
 
-export type TransitionHooks = Pick<
-  TransitionProps,
+export type FixedPositionTransitionHooks<E extends HTMLElement> = Pick<
+  TransitionCallbacks<E>,
   "onEnter" | "onEntering" | "onEntered" | "onExited"
 >;
 
-export interface FixedPositioningOptions
+export interface FixedPositioningOptions<E extends HTMLElement>
   extends OptionalFixedPositionOptions,
-    TransitionHooks {
+    FixedPositionTransitionHooks<E> {
   /**
    * The element that the transitioning node should be fixed to.
    */
@@ -101,7 +101,8 @@ function getFixedTo(fixedTo: FixedTo): HTMLElement | null {
   }
 }
 
-interface ReturnValue extends Required<TransitionHooks> {
+interface ReturnValue<E extends HTMLElement>
+  extends Required<FixedPositionTransitionHooks<E>> {
   style?: CSSProperties;
   updateStyle: () => void;
 }
@@ -117,7 +118,7 @@ interface ReturnValue extends Required<TransitionHooks> {
  *
  * > It is recommended to start the exit animation when that happens though.
  */
-export default function useFixedPositioning({
+export default function useFixedPositioning<E extends HTMLElement>({
   onEnter,
   onEntering,
   onEntered,
@@ -139,7 +140,7 @@ export default function useFixedPositioning({
   preventOverlap = false,
   disableSwapping = false,
   disableVHBounds = false,
-}: FixedPositioningOptions): ReturnValue {
+}: FixedPositioningOptions<E>): ReturnValue<E> {
   const [style, setStyle] = useState<CSSProperties | undefined>();
   const [element, setElement] = useState<HTMLElement | null>(null);
 
@@ -212,7 +213,7 @@ export default function useFixedPositioning({
   );
 
   const handleEnter = useCallback(
-    (node: HTMLElement, appear: boolean) => {
+    (node: E, appear: boolean) => {
       if (onEnter) {
         onEnter(node, appear);
       }
@@ -223,7 +224,7 @@ export default function useFixedPositioning({
   );
 
   const handleEntering = useCallback(
-    (node: HTMLElement, appear: boolean) => {
+    (node: E, appear: boolean) => {
       if (onEntering) {
         onEntering(node, appear);
       }
@@ -234,7 +235,7 @@ export default function useFixedPositioning({
   );
 
   const handleEntered = useCallback(
-    (node: HTMLElement, appear: boolean) => {
+    (node: E, appear: boolean) => {
       if (onEntered) {
         onEntered(node, appear);
       }
@@ -245,7 +246,7 @@ export default function useFixedPositioning({
   );
 
   const handleExited = useCallback(
-    (node: HTMLElement) => {
+    (node: E) => {
       if (onExited) {
         onExited(node);
       }

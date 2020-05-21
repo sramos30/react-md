@@ -13,7 +13,7 @@ import {
 } from "./constants";
 import getClassNames from "./getClassNames";
 import getTimeout from "./getTimeout";
-import { CSSTransitionOptions, CSSTransitionProvidedProps } from "./types";
+import { CSSTransitionHookOptions, CSSTransitionProvidedProps } from "./types";
 import useTransition from "./useTransition";
 
 type Rendered = boolean;
@@ -95,34 +95,20 @@ export type CSSTransitionReturnValue<E extends HTMLElement> = [
  * for triggering the transition manually (should not be used much), and the
  * current transition stage.
  */
-export default function useCSSTransition<
-  E extends HTMLElement = HTMLDivElement
->({
+export default function useCSSTransition<E extends HTMLElement>({
   appear = false,
   temporary = false,
   timeout,
-  transitionIn,
-  onEnter,
-  onEntering,
-  onEntered,
-  onExit,
-  onExiting,
-  onExited,
   className,
   classNames: propClassNames,
-}: CSSTransitionOptions<E>): CSSTransitionReturnValue<E> {
+  ...options
+}: CSSTransitionHookOptions<E>): CSSTransitionReturnValue<E> {
   const { rendered, stage, ref, appearing, dispatch } = useTransition<E>({
+    ...options,
     appear,
     repaint: true,
-    timeout,
     temporary,
-    transitionIn,
-    onEnter,
-    onEntering,
-    onEntered,
-    onExit,
-    onExiting,
-    onExited,
+    timeout,
   });
 
   const classNames = getClassNames(propClassNames, getTimeout(timeout, appear));

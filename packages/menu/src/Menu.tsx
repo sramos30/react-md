@@ -3,7 +3,7 @@ import React, { forwardRef, HTMLAttributes, useState, useRef } from "react";
 import cn from "classnames";
 import { RenderConditionalPortalProps } from "@react-md/portal";
 import {
-  OverridableCSSTransitionProps,
+  CSSTransitionConfig,
   ScaleTransition,
   useFixedPositioning,
 } from "@react-md/transition";
@@ -27,7 +27,7 @@ export type MenuPositionOptions = Omit<
 
 export interface MenuProps
   extends HTMLAttributes<HTMLDivElement>,
-    OverridableCSSTransitionProps,
+    CSSTransitionConfig<HTMLDivElement>,
     RenderConditionalPortalProps {
   /**
    * The id for the menu. This is required for a11y.
@@ -157,8 +157,7 @@ const Menu = forwardRef<HTMLDivElement, StrictProps>(function Menu(
     portal,
     portalInto,
     portalIntoId,
-    mountOnEnter = true,
-    unmountOnExit = true,
+    temporary = true,
     onEnter: propOnEnter,
     onEntering: propOnEntering,
     onEntered: propOnEntered,
@@ -240,10 +239,11 @@ const Menu = forwardRef<HTMLDivElement, StrictProps>(function Menu(
   const orientation = horizontal ? "horizontal" : "vertical";
   return (
     <ScaleTransition
+      nodeRef={ref}
       portal={portal}
       portalInto={portalInto}
       portalIntoId={portalIntoId}
-      appear={mountOnEnter}
+      appear={temporary}
       visible={visible}
       classNames={classNames}
       timeout={timeout}
@@ -253,29 +253,27 @@ const Menu = forwardRef<HTMLDivElement, StrictProps>(function Menu(
       onExit={onExit}
       onExiting={onExiting}
       onExited={onExited}
-      mountOnEnter={mountOnEnter}
-      unmountOnExit={unmountOnExit}
+      temporary={temporary}
     >
-      <OrientationProvider orientation={orientation}>
-        <div
-          {...props}
-          aria-orientation={orientation}
-          ref={ref}
-          role={role}
-          tabIndex={tabIndex}
-          style={style}
-          className={cn(block({ horizontal }), className)}
-          onClick={onClick}
-          onKeyDown={onKeyDown}
-        >
+      <div
+        {...props}
+        aria-orientation={orientation}
+        role={role}
+        tabIndex={tabIndex}
+        style={style}
+        className={cn(block({ horizontal }), className)}
+        onClick={onClick}
+        onKeyDown={onKeyDown}
+      >
+        <OrientationProvider orientation={orientation}>
           {children}
           <MenuEvents
             menuRef={menuRef}
             cancelled={cancelled}
             defaultFocus={defaultFocus}
           />
-        </div>
-      </OrientationProvider>
+        </OrientationProvider>
+      </div>
     </ScaleTransition>
   );
 });
@@ -311,8 +309,7 @@ if (process.env.NODE_ENV !== "production") {
         vhMargin: PropTypes.number,
         disableSwapping: PropTypes.bool,
       }),
-      mountOnEnter: PropTypes.bool,
-      unmountOnExit: PropTypes.bool,
+      temporary: PropTypes.bool,
       defaultFocus: PropTypes.oneOf(["first", "last"]),
       classNames: PropTypes.oneOfType([
         PropTypes.string,

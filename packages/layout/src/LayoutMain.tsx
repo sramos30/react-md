@@ -1,8 +1,11 @@
 import React, { forwardRef, HTMLAttributes, useRef } from "react";
 import cn from "classnames";
-import { CSSTransitionClassNames } from "react-transition-group/CSSTransition";
 import { DEFAULT_SHEET_TIMEOUT } from "@react-md/sheet";
-import { TransitionTimeout, useCSSTransition } from "@react-md/transition";
+import {
+  TransitionTimeout,
+  useCSSTransition,
+  CSSTransitionClassNames,
+} from "@react-md/transition";
 import { bem, useIsUserInteractionMode } from "@react-md/utils";
 
 import { DEFAULT_LAYOUT_MAIN_CLASS_NAMES } from "./constants";

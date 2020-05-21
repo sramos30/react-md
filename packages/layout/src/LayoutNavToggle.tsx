@@ -1,10 +1,13 @@
 import React, { forwardRef, ReactNode } from "react";
 import cn from "classnames";
-import { CSSTransitionClassNames } from "react-transition-group/CSSTransition";
 import { AppBarNav, AppBarNavProps } from "@react-md/app-bar";
 import { useIcon } from "@react-md/icon";
 import { DEFAULT_SHEET_TIMEOUT } from "@react-md/sheet";
-import { TransitionTimeout, useCSSTransition } from "@react-md/transition";
+import {
+  CSSTransitionClassNames,
+  TransitionTimeout,
+  useCSSTransition,
+} from "@react-md/transition";
 
 import { DEFFAULT_LAYOUT_NAV_TOGGLE_CLASS_NAMES } from "./constants";
 import { useLayoutConfig } from "./LayoutProvider";

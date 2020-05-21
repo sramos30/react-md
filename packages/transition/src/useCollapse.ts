@@ -1,21 +1,95 @@
-import { CSSProperties, useState, useMemo } from "react";
+import { CSSProperties, RefCallback, useMemo, useState } from "react";
 import cn from "classnames";
 
 import {
+  COLLAPSE_TIMEOUT,
   DEFAULT_COLLAPSE_MIN_HEIGHT,
   DEFAULT_COLLAPSE_MIN_PADDING_BOTTOM,
   DEFAULT_COLLAPSE_MIN_PADDING_TOP,
-  COLLAPSE_TIMEOUT,
+  ENTER,
   ENTERING,
+  EXIT,
   EXITED,
   EXITING,
-  ENTER,
-  EXIT,
 } from "./constants";
 import getElementSizing from "./getElementSizing";
 import getTimeout from "./getTimeout";
-import { CollapseOptions, CollapseTransitionProvidedProps } from "./types";
+import { TransitionConfig, TransitionCallbacks } from "./types";
 import useTransition from "./useTransition";
+
+export interface CollapseTransitionProvidedProps<E extends HTMLElement> {
+  /**
+   * A ref that **must** be passed to the element that is triggering a CSS
+   * transition change. An error will be thrown if the transition starts, but
+   * the ref is still `null` or the `ref` was passed to a component instance
+   * instead of a DOM node.
+   */
+  ref: RefCallback<E>;
+
+  /**
+   * The `hidden` DOM attribute that will be enabled if the component is fully
+   * collapsed with no height and padding but still rendered within the DOM.
+   */
+  hidden: boolean;
+
+  /**
+   * A conditional style that will provide the required `max-height`,
+   * `padding-top`, `padding-bottom`, and `transition-duration` styles required
+   * for the collapse transition.
+   */
+  style?: CSSProperties;
+
+  /**
+   * The class name to apply that will allow for the element to transition
+   * between collapsed states.
+   */
+  className: string;
+}
+
+export interface CollapseHookOptions<E extends HTMLElement>
+  extends TransitionCallbacks<E>,
+    Pick<TransitionConfig<E>, "timeout" | "temporary"> {
+  /**
+   * An optional className to merge with the collapse class names
+   */
+  className?: string;
+
+  /**
+   * The minimum height that the collapsed element can be which defaults to `0`.
+   * This can either be a number of pixels or a string CSS height value.
+   *
+   * Setting this value to any non-zero value will allow for the element to
+   * shrink to the defined min-height, and then expand to the full height once
+   * no longer collapsed.
+   *
+   * Note: If the `minHeight`, `minPaddingTop`, and `minPaddingBottom` options
+   * are all set to `0` (default), the child will be removed from the DOM while
+   * collapsed.
+   */
+  minHeight?: number | string;
+
+  /**
+   * The minimum padding-top that the collapsed element can be which defaults to
+   * `0`. This can either be a number of pixels or a string CSS `padding-top`
+   * value.
+   *
+   * Note: If the `minHeight`, `minPaddingTop`, and `minPaddingBottom` options
+   * are all set to `0` (default), the child will be removed from the DOM while
+   * collapsed.
+   */
+  minPaddingTop?: number | string;
+
+  /**
+   * The minimum padding-bottom that the collapsed element can be which defaults
+   * to `0`. This can either be a number of pixels or a string CSS
+   * `padding-bottom` value.
+   *
+   * Note: If the `minHeight`, `minPaddingTop`, and `minPaddingBottom` options
+   * are all set to `0` (default), the child will be removed from the DOM while
+   * collapsed.
+   */
+  minPaddingBottom?: number | string;
+}
 
 type Rendered = boolean;
 type ReturnValue<E extends HTMLElement> = [
@@ -65,11 +139,10 @@ type ReturnValue<E extends HTMLElement> = [
  * rendered in the DOM followed by an object of props to pass to the collapsible
  * element to handle the transition.
  */
-export default function useCollapse<E extends HTMLElement = HTMLDivElement>(
+export default function useCollapse<E extends HTMLElement>(
   collapsed: boolean,
   {
     className,
-    appear = false,
     timeout = COLLAPSE_TIMEOUT,
     onEnter,
     onEntering,
@@ -83,7 +156,7 @@ export default function useCollapse<E extends HTMLElement = HTMLDivElement>(
     temporary = minHeight === 0 &&
       minPaddingTop === 0 &&
       minPaddingBottom === 0,
-  }: CollapseOptions<E> = {}
+  }: CollapseHookOptions<E> = {}
 ): ReturnValue<E> {
   const [style, setStyle] = useState<CSSProperties | undefined>(() => {
     if (!collapsed) {
@@ -98,7 +171,7 @@ export default function useCollapse<E extends HTMLElement = HTMLDivElement>(
   });
 
   const { rendered, stage, ref } = useTransition<E>({
-    appear,
+    appear: false,
     repaint: true,
     timeout,
     temporary,

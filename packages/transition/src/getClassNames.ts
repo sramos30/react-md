@@ -1,9 +1,12 @@
-import { CSSTransitionClassNames } from "react-transition-group/CSSTransition";
 import { defaults } from "@react-md/utils";
 
 import { DefinedTimeout } from "./getTimeout";
+import {
+  CSSTransitionClassNames,
+  CSSTransitionActionClassNames,
+} from "./types";
 
-type DefinedCSSTransitionClassNames = Required<CSSTransitionClassNames>;
+type DefinedCSSTransitionClassNames = Required<CSSTransitionActionClassNames>;
 
 /**
  * Gets an object of al the CSS class names to use for the useCSSTransition
@@ -14,7 +17,7 @@ type DefinedCSSTransitionClassNames = Required<CSSTransitionClassNames>;
  * @private
  */
 export default function getClassNames(
-  classNames: CSSTransitionClassNames | string,
+  classNames: CSSTransitionClassNames,
   timeout: DefinedTimeout
 ): DefinedCSSTransitionClassNames {
   if (typeof classNames === "string") {

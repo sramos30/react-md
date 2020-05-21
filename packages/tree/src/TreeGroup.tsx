@@ -5,7 +5,7 @@ import { Collapse, CollapseProps } from "@react-md/transition";
 
 export interface TreeGroupProps
   extends ListProps,
-    Omit<CollapseProps, "children"> {}
+    Omit<CollapseProps<ListElement>, "children"> {}
 
 /**
  * The `TreeGroup` component is used to render a tree item's nested items
